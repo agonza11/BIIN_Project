@@ -1,0 +1,12 @@
+Working Schema
+Production(Crop VARCHAR(10), State VARCHAR(2), Year(INT), Amount (INT))
+Adoption(Crop VARCHAR(10), GM VARCHAR(10), State VARCHAR(2), Year(INT), Percent (INT))
+
+Crop[Corn, Cotton, Soybean]
+CornSt[Illinois, Indiana, Iowa, Kansas, Michigan, Minnesota, Nebraska, North Dakota, Ohio, South Dakota, Ohio, South Dakota, Texas, Wisconsin]
+CottonSt[Alabama, Arkansas, California, Georgia, Louisiana, Mississippi, Missouri, North Carolina, Tennessee, Texas]
+SoyBSt[Arkansas, Illinois, Indiana, Iowa, Kansas, Michigan, Minnesota, Mississippi, Missouri, Nebraska, North Dakota, Ohio, South Dakota, Wisconsin]
+Years[1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
+GM[Insect-resistant(Bt), Herbicide-tolerant, Stacked, AllVarieties]
+
+p.s. okay so I dont have alot but this is enough for the homeworks
