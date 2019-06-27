@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <div class="Predictive Data">
+    <h1>A Look into the Future</h1>
+    <p>Select Crop</p>
+      <form name ="crop" name ="year"  action = "/Future_Projections/" method= "POST">
+        <select name="crop">
+          <option value="Corn">Corn</option>
+          <option value="Cotton">Cotton</option>
+          <option value="Soybeans">Soybeans</option>
+        </select>
+        <input type = "submit"  value = "Submit">
+<hr>
+        <body>
+          <div style = "padding-left:16x">
+            <center>
+
+            {%if crop == 'Corn':%}
+              <h3>Future Projections of</h3>
+              <h3>{{ crop }}</h3>
+              <table border="2" style="table-layout:fixed;" class="minimalistBlack">
+                <thread>
+                  <tr>
+                    <th>Crop</th>
+                    <th>Year</th>
+                    <th>Planted</th>
+                    <th>Harvest</th>
+                  </tr>
+
+              <tbody>
+                {% for future in ans%}
+                <tr>
+                  <td>{{future.crop}}</td>
+                  <td>{{future.year}}</td>
+                  <td>{{future.planted}}</td>
+                  <td>{{future.harvested}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </thread>
+            </table>
+            <p>{{get_future(crop)}}</p>
+            {%elif crop == 'Cotton':%}
+              <h3>Future Projections of</h3>
+              <h3>{{ crop }}</h3>
+              <table border="2" style="table-layout:fixed;" class="minimalistBlack">
+                <thread>
+                  <tr>
+                    <th>Crop</th>
+                    <th>Year</th>
+                    <th>Planted</th>
+                    <th>Harvest</th>
+                  </tr>
+
+              <tbody>
+                {% for future in ans%}
+                <tr>
+                  <td>{{future.crop}}</td>
+                  <td>{{future.year}}</td>
+                  <td>{{future.planted}}</td>
+                  <td>{{future.harvested}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </thread>
+            </table>
+            <p>{{get_future(crop)}}</p>
+            {%elif crop == 'Soybeans':%}
+              <h3>Future Projections of</h3>
+              <h3>{{ crop }}</h3>
+              <table border="2" style="table-layout:fixed;" class="minimalistBlack">
+                <thread>
+                  <tr>
+                    <th>Crop</th>
+                    <th>Year</th>
+                    <th>Planted</th>
+                    <th>Harvest</th>
+                  </tr>
+
+              <tbody>
+                {% for future in ans%}
+                <tr>
+                  <td>{{future.crop}}</td>
+                  <td>{{future.year}}</td>
+                  <td>{{future.planted}}</td>
+                  <td>{{future.harvested}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </thread>
+            </table>
+            <p>{{get_future(crop)}}</p>
+            {%else:%}
+              <h3></h3>
+            {% endif %}
+            </center>
+          </div>
+        </body>
+      </form>
+      <p>When a crop choice is selected a window will pop up showing a graphical representation of the data. This graph can be manipulated to show individual datasets and can also be saved.</p>
+      <p>These graphs were made using data found from <a href = "https://www.usda.gov/oce/commodity/projections/USDA_Agricultural_Projections_to_2024.pdf"> "USDA Agricultural Projections to 2024"</a>. The assumptions are based on statistical data coming from limiting factors in the agricultural industry including population growth, economic growth, value of the US dollar, oil prices, U.S. Agricultual policy, biofuels, international policy, prices, and macroeconomics.</p>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="Historical Database">
+    <h1>Crop Production</h1>
+
+    <form name = "crop" name ="state" name = "year" action = "/Historical_Crop_Database/" method="POST">
+
+        <select name="crop">
+          {%for crop in cropchoice[0:]%}
+          <option value ="{{crop}}">{{crop}}</option>
+          {%endfor%}
+        </select>
+        <input type = "submit" value = "Submit"/>
+
+        <select name="state">
+          {%for state in statechoice[0:]%}
+          <option value ="{{state}}">{{state}}</option>
+          {%endfor%}
+        </select>
+        <input type = "submit" value = "Submit"/>
+
+        <select name="year">
+          {%for year in yearchoice[0:]%}
+          <option value ="{{year}}">{{year}}</option>
+          {%endfor%}
+        </select>
+        <input type = "submit" value = "Submit"/>
+
+    </form>
+<hr>
+
+{%if year != ' '%}
+  <p>Query: {{crop}} {{state}} {{year}}</p>
+  <p>In {{state}}, during {{year}}, {{production_function(crop,state,year)}}</p>
+{%else%}
+  <p>Query: {{crop}} {{state}} {{year}}</p>
+{%endif%}
+<hr>
+<p> The Query view allows you to track your selections. Once a selection has been made a window will pop up with a graphical representation of the data. This graph has zooming capabilities and can also be saved.</p>
+<p>These records span from 1990 to 2018. The USDA began documenting data relating to GM crops in 2000. Records prior to this date will not have any data on GM crops.</p>
+
+
+  </div>
+{% endblock %}

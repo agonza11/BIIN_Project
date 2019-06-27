@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="Herbicide_Usage">
+    <h1>Herbicide Usage</h1>
+
+    <form name = "crop" name ="state" name = "year" action = "/Herbicide_Usage/" method="POST">
+
+        <select name="crop">
+          {%for crop in cropchoice[0:]%}
+          <option value ="{{crop}}">{{crop}}</option>
+          {%endfor%}
+        </select>
+        <input type = "submit" value = "Submit"/>
+
+        <select name="state">
+          {%for state in statechoice[0:]%}
+          <option value ="{{state}}">{{state}}</option>
+          {%endfor%}
+        </select>
+        <input type = "submit" value = "Submit"/>
+
+        <select name="year">
+          {%for year in yearchoice[0:]%}
+          <option value ="{{year}}">{{year}}</option>
+          {%endfor%}
+        </select>
+        <input type = "submit" value = "Submit"/>
+    </form>
+<hr>
+    {%if year != ' '%}
+      <p>Query: {{crop}} {{state}} {{year}}</p>
+      <p>{{herbicide_function(crop,state,year)}}</p>
+    {%else%}
+      <p>Query: {{crop}} {{state}} {{year}}</p>
+    {%endif%}
+<hr>
+<p> The Query view allows you to track your selections. Once a selection has been made a window will pop up with a graphical representation of the data. This graph has zooming capabilities and can also be saved.</p>
+<p> The values of these graphs were collected by the USDA during extensive field research. Policies and laws allow farmers to withhold information such as herbicides used and individual use amounts. These were taken into account when finding the sum total of herbicide used.</p>
+<p> The information for this section is not available on a yearly basis but the records collected for this dataset attempt to cover from the years of 1990 to 2018.</p>
+</div>
+{% endblock %}
