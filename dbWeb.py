@@ -126,7 +126,7 @@ def production_function(crop, state, year):
             plt.tight_layout()
             plt.show()
 
-        return(data)
+        return(answer)
     else:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute("""
