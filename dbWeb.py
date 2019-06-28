@@ -25,15 +25,15 @@ connection_string = config['database']['postgres_connection']
 conn = connect_to_db(connection_string)
 cur = conn.cursor()
  #functional parts
-def production_function(crop, state, year):
-    title = ("GMO Breakdown of " + crop + " in " + state + ", " + year)
+def production_function(crop, state, year): #this function returns the data for crop production
+    title = ("GMO Breakdown of " + crop + " in " + state + ", " + year) #creates a nice title for the graph
     table = list()
     bt = list()
     ht = list()
     st = list()
     data = list()
-    if (year != ' ' and int(year) >= 2000):
-        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+    if (year != ' ' and int(year) >= 2000):#USDA started collecting gmo data during 2000. Data collected goes back to 1990
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:#SQL Query
             cursor.execute("""
             SELECT Production.Planted, Production.Crop, Production.Harvested, AllGMO.Percent
             FROM Production
@@ -41,18 +41,18 @@ def production_function(crop, state, year):
             WHERE (Production.Crop = %s AND Production.State = %s AND Production.Year = %s AND
             AllGMO.Crop = %s AND AllGMO.State = %s AND AllGMO.Year = %s)""", (crop, state, year, crop, state, year))
             for d in cursor:
-                table.append(d)
+                table.append(d)#fills list named table with data from query. lines below convert list to string and clean it and then convert it to sentence
             answer1 = str(table).replace('[{','')
-            answer2 = str(answer1).replace(': ','')
-            answer3 = str(answer2).replace("'","")
-            answer4 = str(answer3).replace(",","")
-            answer5 = str(answer4).replace('planted',' ')
-            answer6 = str(answer5).replace('crop',' pounds of ')
-            answer7 = str(answer6).replace('harvested',' was planted, and ')
-            answer8 = str(answer7).replace('percent',' pounds were harvested. According to USDA data ')
-            answer9 = str(answer8).replace('C','c')
-            answer10 = str(answer9).replace('Soy','soy')
-            answer = str(answer10).replace('}]','% was documented as being a GMO crop.')
+            answer2 = answer1.replace(': ','')
+            answer3 = answer2.replace("'","")
+            answer4 = answer3.replace(",","")
+            answer5 = answer4.replace('planted',' ')
+            answer6 = answer5.replace('crop',' pounds of ')
+            answer7 = answer6.replace('harvested',' was planted, and ')
+            answer8 = answer7.replace('percent',' pounds were harvested. According to USDA data ')
+            answer9 = answer8.replace('C','c')
+            answer10 = answer9.replace('Soy','soy')
+            answer = answer10.replace('}]','% was documented as being a GMO crop.')
 
             cursor.execute("""
             SELECT BtGMO.Percent
@@ -61,7 +61,8 @@ def production_function(crop, state, year):
             WHERE (Production.Crop = %s AND Production.State = %s AND Production.Year = %s AND
             BtGMO.Crop = %s AND BtGMO.State = %s AND BtGMO.Year = %s)""", (crop, state, year, crop, state, year))
             for d in cursor:
-                bt.append(d)
+                bt.append(d)#stores sql query for bt gmo data in list
+            #lines below convert list to string and clean it to leave just a list of strings (values)
             temp1 = str(bt).replace('percent','')
             temp2 = temp1.replace(':','')
             temp3 = temp2.replace('{','')
@@ -71,9 +72,9 @@ def production_function(crop, state, year):
             temp7 = temp6.replace('(','')
             temp8 = temp7.replace(')','')
             temp9 = temp8.replace("'","")
-            temp = temp9.split(', ')
+            temp = temp9.split(', ')#splits string into list of strings
             for i in temp:
-                data.append(int(i))
+                data.append(int(i)) #converts list of strings to list of integers
 
             cursor.execute("""
             SELECT HerbTolGMO.Percent
@@ -82,7 +83,8 @@ def production_function(crop, state, year):
             WHERE (Production.Crop = %s AND Production.State = %s AND Production.Year = %s AND
             HerbTolGMO.Crop = %s AND HerbTolGMO.State = %s AND HerbTolGMO.Year = %s)""", (crop, state, year, crop, state, year))
             for d in cursor:
-                ht.append(d)
+                ht.append(d)#stores data in list
+            #converts list to string and cleans
             temp1 = str(ht).replace('percent','')
             temp2 = temp1.replace(':','')
             temp3 = temp2.replace('{','')
@@ -92,9 +94,9 @@ def production_function(crop, state, year):
             temp7 = temp6.replace('(','')
             temp8 = temp7.replace(')','')
             temp9 = temp8.replace("'","")
-            temp = temp9.split(', ')
+            temp = temp9.split(', ') #converts string into a list of strings
             for i in temp:
-                data.append(int(i))
+                data.append(int(i))#converts list of strings to list of integers
 
             cursor.execute("""
             SELECT StackedGMO.Percent
@@ -103,7 +105,8 @@ def production_function(crop, state, year):
             WHERE (Production.Crop = %s AND Production.State = %s AND Production.Year = %s AND
             StackedGMO.Crop = %s AND StackedGMO.State = %s AND StackedGMO.Year = %s)""", (crop, state, year, crop, state, year))
             for d in cursor:
-                st.append(d)
+                st.append(d)#adds query results to list
+            #converts list to string and cleans
             temp1 = str(st).replace('percent','')
             temp2 = temp1.replace(':','')
             temp3 = temp2.replace('{','')
@@ -113,19 +116,21 @@ def production_function(crop, state, year):
             temp7 = temp6.replace('(','')
             temp8 = temp7.replace(')','')
             temp9 = temp8.replace("'","")
-            temp = temp9.split(', ')
+            temp = temp9.split(', ')#turns string into list of strings
             for i in temp:
-                data.append(int(i))
-
+                data.append(int(i))#converts list of strings to list of integers
+            #This creates a pie chart based on the user selected inputs from CropDB.html
             labels = ['Bt', 'Herbicide Tolerance', 'Stacked']
-            colors = ['red', 'blue', 'purple']
+            colors = ['red', 'blue', 'purple']#color selection is red for Bt, blue for Herbicide Tolerance, and purple for stacked because its a mix of the two
             patches, texts = plt.pie(data, colors=colors, shadow=True, startangle=90)
             plt.legend(patches, labels, loc="best")
             plt.axis('equal')
             plt.title(title)
             plt.tight_layout()
             plt.show()
-
+            #so if year is 2000 or greater it shows a pie chart and returns the results in the form of a sentence
+            #sentence has information on crops planted, harvested, and how many of those were GMs
+            #the pie chart shows the breakdown of the specified GMOs
         return(answer)
     else:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
@@ -134,21 +139,21 @@ def production_function(crop, state, year):
             FROM Production
             WHERE (Production.Crop = %s AND Production.State = %s AND Production.Year = %s)""",(crop,state,year))
             for d in cursor:
-                table.append(d)
+                table.append(d) #puts results into a list
+                #converts list to string and cleans it to make results into a sentence
             answer1 = str(table).replace('[{','')
-            answer2 = str(answer1).replace(': ','')
-            answer3 = str(answer2).replace("'","")
-            answer4 = str(answer3).replace(",","")
-            answer5 = str(answer4).replace('planted',' ')
-            answer6 = str(answer5).replace('crop',' pounds of ')
-            answer7 = str(answer6).replace('C','c')
-            answer8 = str(answer7).replace('Soy','soy')
-            answer9 = str(answer8).replace('harvested',' was planted, and ')
-            answer = str(answer9).replace('}]',' pounds were harvested.')
-
-
-            return(answer)
-def herbicide_function(crop, state, year):
+            answer2 = answer1.replace(': ','')
+            answer3 = answer2.replace("'","")
+            answer4 = answer3.replace(",","")
+            answer5 = answer4.replace('planted',' ')
+            answer6 = answer5.replace('crop',' pounds of ')
+            answer7 = answer6.replace('C','c')
+            answer8 = answer7.replace('Soy','soy')
+            answer9 = answer8.replace('harvested',' was planted, and ')
+            answer = answer9.replace('}]',' pounds were harvested.')
+            return(answer) #only returns the sql results as a sentence no graph due to lack of practicality
+        
+def herbicide_function(crop, state, year): #This function returns a graph on herbicide data
     names = list()
     application = list()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
@@ -157,9 +162,10 @@ def herbicide_function(crop, state, year):
             SELECT Herbicide FROM Herbicide
             WHERE Crop = %s AND State = %s AND Year = %s
             """,(crop,state,year))
-            for d in cursor:
+            for d in cursor: #adds query results to list
                 names.append(d)
-            #the next 30 or so lines of code are for cleaning up the results of names so it can be put into a list of strings
+            #the next 30 or so lines of code are for turning the elements in the list into a string and then cleans it
+            #its particularly messy due to the nature of chemical names
             temp1 = str(names).replace('herbicide','')
             temp2 = temp1.replace(':','')
             temp3 = temp2.replace('{','')
@@ -188,16 +194,16 @@ def herbicide_function(crop, state, year):
             temp26 = temp25.replace('4-D, CHL', '4-D,CHL') #for herbicide 2,4-D, Chlorine salt
             temp27 = temp26.replace('CPA, 2-E', 'CPA,2-E') #for herbicide MCBA,2-Ethylhexyl
             temp28 = temp27.replace('PP-P, DMA', 'PP-P,DMA') #for herbicide MCPP-P, DMA Salt
-            chems = temp27.split(', ') #makes chems into a list of strings with no extra characters while maintining the herbicide names
+            chems = temp27.split(', ') #splits the string into a list of strings
 
             cursor.execute("""
             SELECT ApplicationInLBS FROM Herbicide
             WHERE Crop = %s AND State = %s AND Year = %s
             """,(crop,state,year))
             for d in cursor:
-                application.append(d)
+                application.append(d)#adds sql results to list
 
-            #this is all a string. needs cleaning then can be put into a list for matplotlib
+            #turns list to string. cleans it so it can be turned into a list for matplotlib
             temp1 = str(application).replace('applicationinlbs','')
             temp2 = temp1.replace(':','')
             temp3 = temp2.replace('{','')
@@ -207,6 +213,7 @@ def herbicide_function(crop, state, year):
             temp7 = temp6.replace('(','')
             temp8 = temp7.replace(')','')
             temp9 = temp8.replace("'","")
+            #the next two lines are tricky. matplotlib graphs wont register choices if their value is 0 so I set it to the next lowest possible integer 1
             temp10 = temp9.replace('NULL','1') #Within Herbicide there are chem that were documented as used but not given values
             temp11 = temp10.replace(' 0', '1') #This is due to a lack of records and this is the only way that matplotlib can render the graph
             temp = temp11.split(', ') #makes temp into a list of strings
@@ -217,7 +224,9 @@ def herbicide_function(crop, state, year):
 
             #creates a bar graph using chems and data
             #matplotlib renders it in as a widget and allows users to zoom in on certain data points while scaling properly
-        if len(data) == len(chems):
+            #widget allows them to zoom into individual chems and scales accordingly while letting users save them. also gives exact x, y coordinates
+            #dislike that functonality comes at cost of a pop up window but in terms of functionality its more than worth the bang for its buck
+        if len(data) == len(chems): #check to make sure the lists are the same size, cause if they're not then matplotlab can't render the image and gives a webpage crashing error
             plt.rcdefaults()
             fig, ax = plt.subplots()
             y_pos=np.arange(len(chems))
@@ -230,10 +239,12 @@ def herbicide_function(crop, state, year):
             ax.set_title('Herbicide Usage')
             plt.show()
             plt.close()
+            return('')
         else:
             print("Whoops something went wrong!")
-            return(data,chems)
-
+            return(data,chems)#for error events/debugging
+        
+#the next three "crop"Future() functions are just static sql calls that return their results in list form
 def cornFuture():
     table = list()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
@@ -256,7 +267,7 @@ def soybeanFuture():
             table.append(d)
         return(table)
 
-def get_future(crop):
+def get_future(crop): #since future is so short (5 years) this is a full proof list method. matplotlib widget grants even more functionality and automatic scaling which is nice
         x= [2019,2020,2021,2022,2023,2024]
         if crop == 'Corn':
             cornYaxisPlanted= [89.5,89.5,89.0,89.0,89.0,89.0]
