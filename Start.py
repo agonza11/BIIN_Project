@@ -1,6 +1,4 @@
-
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-import matplotlib.pyplot as plt
+flask import Flask, render_template, request, redirect, url_for, jsonify
 from dbWeb import *
 
 app = Flask(__name__)
