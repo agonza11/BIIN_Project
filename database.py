@@ -1,3 +1,5 @@
+#this is a standalone file that sets up the database
+#configi.ini file not included
 import psycopg2
 import psycopg2.extras
 import csv
@@ -20,6 +22,8 @@ connection_string = config['database']['postgres_connection']
 conn = connect_to_db(connection_string)
 cursor = conn.cursor()
 
+
+#below are all used for debugging
 #cursor.execute("""DROP TABLE BtGMO""")
 
 #cursor.execute("""DROP TABLE HerbTolGMO""")
