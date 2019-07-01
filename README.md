@@ -1,5 +1,5 @@
 # BIIN_Project
-The 8 major crops that keep America Moving are Corn, Upland Cotton, Soybeans, Wheat, Barley, Oats, Rice, Sorghum
+The 8 major crops that keep America moving are Corn, Upland Cotton, Soybeans, Wheat, Barley, Oats, Rice, Sorghum
 This project focuses on Corn, Upland Cotton, and Soybeans and only uses USDA collected data
 
 The ultimate goal is to create a website with a database that does the following
@@ -15,3 +15,13 @@ This project can't make direct correlations but I hope to show that as GMO adopt
 either the production of crops or a noticeable change in the amount of herbicides used. In essence its an ad hoc experiment but I
 am with holding my personal views as I want visitors to come to the website with preconcived notions on GMOs and want to provide
 them unbaised facts so that they can further educate themselves on GMOs.
+
+The way to set up the project is to first create a folder Website to hold the Start.py dbWeb.py database.py and .csv files.
+Next is to create two more folder in the first folder, one named templates and the other named static
+In the templates folder you need to put in all the .html files
+In the static folder you need to make another folder called css
+In the css folder you have to store main.css
+
+Now you can run the project off of your compand prompt or terminal by navigating to the Website folder and using the command python Start.py. it should be available for viewing on the localhost
+
+If the project fails to run then make sure you install python3, flask, and matplotlib
